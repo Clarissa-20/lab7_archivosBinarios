@@ -19,7 +19,6 @@ public class Reproductor {
     private boolean pausado = false;
     private boolean reproduciendo = false;
 
-    // Este método soluciona tu error de la imagen 6a75fb.png
     public boolean estaReproduciendo() {
         return reproduciendo && !pausado;
     }
@@ -27,7 +26,6 @@ public class Reproductor {
     public void play(String ruta) throws Exception {
         if (pausado && ruta.equals(rutaActual)) {
             pausado = false;
-            // Aquí iría la lógica para reanudar frames si usas hilos
         } else {
             stop();
             rutaActual = ruta;
@@ -51,7 +49,7 @@ public class Reproductor {
 
     public void pause() {
         if (reproduciendo) {
-            pausado = !pausado; // Alterna entre pausa y play
+            pausado = !pausado; 
             if (pausado && player != null) player.close(); 
             else if (!pausado) reproducirNueva();
         }

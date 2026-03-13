@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author HP
  */
 public class ReproductorVisual extends JFrame implements AccionesReproductor {
-    
+
     private ArrayList<Cancion> playList;
     private Cancion cancionSeleccionada;
     private DefaultListModel<String> modeloLista;
@@ -54,9 +54,9 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         modeloLista = new DefaultListModel<>();
         actualizarLista();
         lista = new JList<>(modeloLista);
-        lista.setBackground(new Color(20, 20, 20));
+        lista.setBackground(new Color(15, 15, 15));
         lista.setForeground(new Color(0, 255, 0));
-        lista.setSelectionBackground(new Color(0, 80, 0));
+        lista.setSelectionBackground(new Color(0, 50, 0));
         lista.setSelectionForeground(Color.WHITE);
         lista.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
@@ -68,12 +68,12 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         JPanel panelCentral = new JPanel(new BorderLayout(10, 10));
         panelCentral.setBackground(Color.BLACK);
 
-        imagen = new JLabel("SELECCIONE UNA PISTA", SwingConstants.CENTER);
+        imagen = new JLabel("SELECCIONE UNA CANCIÓN", SwingConstants.CENTER);
         imagen.setForeground(new Color(0, 255, 0));
-        imagen.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 2));
+        imagen.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 1));
         imagen.setPreferredSize(new Dimension(450, 450));
 
-        estado = new JLabel("SISTEMA: STANDBY", SwingConstants.CENTER);
+        estado = new JLabel(" ", SwingConstants.CENTER);
         estado.setForeground(new Color(0, 255, 0));
         estado.setFont(new Font("Monospaced", Font.BOLD, 14));
 
@@ -133,10 +133,10 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         if (cancionSeleccionada != null) {
             try {
                 motor.play(cancionSeleccionada.getRutaArchivo());
-                estado.setText("REPRODUCIENDO...");
+                estado.setText(cancionSeleccionada.getNombre().toUpperCase());
                 temporizador.start();
             } catch (Exception e) {
-                estado.setText("ERROR DE SISTEMA");
+                estado.setText("ERROR DE AUDIO");
             }
         }
     }
@@ -146,10 +146,10 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         motor.pause();
         if (motor.estaReproduciendo()) {
             temporizador.start();
-            estado.setText("REANUDADO");
+            estado.setText("REANUDADO: " + cancionSeleccionada.getNombre().toUpperCase());
         } else {
             temporizador.stop();
-            estado.setText("PAUSADO EN PUNTO ACTUAL");
+            estado.setText("PAUSADO");
         }
     }
 
@@ -157,13 +157,13 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
     public void stop() {
         motor.stop();
         temporizador.stop();
-        barraProgreso.setValue(0); 
-        estado.setText("DETENIDO - RESETEADO");
+        barraProgreso.setValue(0);
+        estado.setText("DETENIDO");
     }
 
     private void mostrarVentanaAgregar() {
-        JDialog win = new JDialog(this, "AGREGAR NUEVA CANCIÓN", true);
-        win.setSize(600, 500);
+        JDialog win = new JDialog(this, "NUEVA CANCIÓN", true);
+        win.setSize(550, 450);
         win.getContentPane().setBackground(Color.BLACK);
         win.setLayout(new BorderLayout(10, 10));
         win.setLocationRelativeTo(this);
@@ -172,18 +172,18 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         pPrincipal.setBackground(Color.BLACK);
         pPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JTextField txtT = crearFieldDark();
-        JTextField txtA = crearFieldDark();
+        JTextField txtT = crearField();
+        JTextField txtA = crearField();
         JComboBox<Genero> cbG = new JComboBox<>(Genero.values());
         cbG.setBackground(Color.BLACK);
         cbG.setForeground(new Color(0, 255, 0));
 
-        JButton btnMP3 = crearBoton("Elegir MP3");
-        JButton btnIMG = crearBoton("Elegir Imagen");
-        JButton btnGuardar = crearBoton("Guardar Canción");
+        JButton btnMP3 = crearBoton("SELECT MP3");
+        JButton btnIMG = crearBoton("SELECT IMAGE");
+        JButton btnGuardar = crearBoton("GUARDAR");
 
-        JLabel lblMP3 = crearLabelDark("Ninguno...");
-        JLabel lblIMG = crearLabelDark("Ninguna...");
+        JLabel lblMP3 = crearLabel("...");
+        JLabel lblIMG = crearLabel("...");
 
         final String[] r = {"default.png", ""};
 
@@ -214,11 +214,11 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
             }
         });
 
-        pPrincipal.add(crearLabelDark("Título:"));
+        pPrincipal.add(crearLabel("Título:"));
         pPrincipal.add(txtT);
-        pPrincipal.add(crearLabelDark("Artista:"));
+        pPrincipal.add(crearLabel("Artista:"));
         pPrincipal.add(txtA);
-        pPrincipal.add(crearLabelDark("Género:"));
+        pPrincipal.add(crearLabel("Género:"));
         pPrincipal.add(cbG);
         pPrincipal.add(btnMP3);
         pPrincipal.add(lblMP3);
@@ -259,7 +259,7 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         return b;
     }
 
-    private JTextField crearFieldDark() {
+    private JTextField crearField() {
         JTextField f = new JTextField();
         f.setBackground(new Color(30, 30, 30));
         f.setForeground(new Color(0, 255, 0));
@@ -268,7 +268,7 @@ public class ReproductorVisual extends JFrame implements AccionesReproductor {
         return f;
     }
 
-    private JLabel crearLabelDark(String t) {
+    private JLabel crearLabel(String t) {
         JLabel l = new JLabel(t);
         l.setForeground(Color.WHITE);
         l.setFont(new Font("Monospaced", Font.BOLD, 12));

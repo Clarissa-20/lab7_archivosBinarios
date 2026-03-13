@@ -9,5 +9,5 @@ package lab7_archivosbinarios;
  * @author HP
  */
 public enum Genero {
-    ROCK, POP, JAZZ, TRAP, CLASICA, DESCONOCIDO
+    ROCK, METAL, POP, JAZZ, TRAP, CLASICA, DESCONOCIDO
 }
